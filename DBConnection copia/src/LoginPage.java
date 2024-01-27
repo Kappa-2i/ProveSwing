@@ -34,7 +34,6 @@ public class LoginPage extends JFrame {
                 e.printStackTrace();
             }
             LoginPage frame = new LoginPage(new MainApp());
-            frame.setVisible(true);
         });
     }
 
