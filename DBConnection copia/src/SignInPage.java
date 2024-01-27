@@ -9,5 +9,6 @@ public class SignInPage extends JFrame {
         setTitle("Login Page");
         setSize(1920, 800);
         setMinimumSize(new Dimension(500, 400));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    }
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 }

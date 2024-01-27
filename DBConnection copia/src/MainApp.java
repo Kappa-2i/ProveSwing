@@ -10,12 +10,26 @@ public class MainApp {
     SignInPage sip;
 
     public static void main(String[] args) {
-        MainApp Ma = new MainApp();
+        SwingUtilities.invokeLater(() -> {
+            try {
+                // Usausa Nimbus Look and Feel
+                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            MainApp ma = new MainApp();
+        });
     }
 
-    public void MainApp(){
+    public MainApp(){
         lp = new LoginPage(this);
-
+        lp.setVisible(true);
     }
 
     public void CheckLogin(String email, String password){
@@ -40,15 +54,37 @@ public class MainApp {
             }
             if (infoUtente != null) {
                 if ("false".equals(infoUtente[2]))
-                    //JOptionPane.showMessageDialog(LoginPage, "Accesso effettuato. Benvenuto "+infoUtente[0]+ " non hai nessun conto aperto.");
-                    lp.setVisible(true);
+                    //return 1 se hai un account ma nessun conto aperto
+                    gestoreLogin(1);
                 else
-                    lp.setVisible(false);
-                    sip.setVisible(true);
+                    //return 2 se hai un account e un conto aperto
+                    gestoreLogin(2);
             } else {
-                //JOptionPane.showMessageDialog(LoginPage.this, "Accesso fallito. Per favore controlla le tue credenziali.");
-                lp.setVisible(true);
+                //return 3 se le credenziali inserite non esistono
+                gestoreLogin(3);
             }
+        }
+        else {
+            JOptionPane.showMessageDialog(lp, "Accesso fallito. Per favore controlla le tue credenziali.");
+        }
+
+    }
+
+    public void gestoreLogin(int caso){
+        switch (caso){
+            case 1:
+                lp.setVisible(false);
+                //registraContoFrame.setVisible(true);
+                break;
+            case 2:
+                lp.setVisible(false);
+                //sip.setVisible(true);
+                break;
+            case 3:
+                JOptionPane.showMessageDialog(lp, "Credenziali errate - Riprova.");
+                break;
+            default:
+                break;
         }
     }
 }

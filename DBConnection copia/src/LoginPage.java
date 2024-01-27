@@ -192,7 +192,7 @@ public class LoginPage extends JFrame {
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
                 if(email.isEmpty())
-                    mostraMessageDialog("Inserire la username", "Attenzione");
+                    mostraMessageDialog("Inserire l'email", "Attenzione");
                 else if(password.isEmpty())
                     mostraMessageDialog("Inserire la password", "Attenzione");
                 else
