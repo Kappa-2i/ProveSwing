@@ -1,5 +1,3 @@
-import com.sun.tools.javac.Main;
-
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
@@ -78,7 +76,7 @@ public class MainApp {
                 break;
             case 2:
                 lp.setVisible(false);
-                //sip.setVisible(true);
+                //hp.setVisible(true);
                 break;
             case 3:
                 JOptionPane.showMessageDialog(lp, "Credenziali errate - Riprova.");
@@ -86,6 +84,17 @@ public class MainApp {
             default:
                 break;
         }
+    }
+
+    public void newUser(){
+        lp.setVisible(false);
+        sip = new SignInPage(this);
+        sip.setVisible(true);
+    }
+
+    public void backToLogin(){
+        sip.setVisible(false);
+        lp.setVisible(true);
     }
 }
 

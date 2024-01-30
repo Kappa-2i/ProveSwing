@@ -15,6 +15,7 @@ public class LoginPage extends JFrame {
     private Font fontBold;
     private Font fontExtraBold;
     private Font fontRegularSmall;
+    private Font fontRegularBold;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -34,6 +35,7 @@ public class LoginPage extends JFrame {
                 e.printStackTrace();
             }
             LoginPage frame = new LoginPage(new MainApp());
+            frame.setVisible(true);
         });
     }
 
@@ -41,40 +43,116 @@ public class LoginPage extends JFrame {
         myGestore = ma;
         setTitle("Login Page");
         setSize(1920, 800);
-        setMinimumSize(new Dimension(500, 400));
+        setMinimumSize(new Dimension(600, 600));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fontBold();
         fontRegular();
         fontExtraBold();
         fontRegularSmall();
+        fontRegularBold();
 
         ImageIcon imageIcon = new ImageIcon(LoginPage.class.getResource("/noun-piggy-bank-55037.png")); // Sostituisci con il tuo percorso
-        JLabel imageLabel = new JLabel(imageIcon);
+        JLabel imageLabel = new JLabel(imageIcon) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image scaledImage = imageIcon.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
+                g.drawImage(scaledImage, 0, 0, null);
+            }
+        };
+
 
         // Crea i componenti
+        // Crea il gradiente di sfondo
+        GradientPanel gradientPanel = new GradientPanel(new Color(0x2F, 0x7B, 0xB1), new Color(0x2f, 0x7b, 0xb1));
+        gradientPanel.setLayout(new GridBagLayout());
+
+
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+
+
+
+        //Crea un JPanel con BoxLayout per contenere i componenti
+        JPanel panelLoginWhite = new JPanel(new GridBagLayout());
+        panelLoginWhite.setBackground(new Color(255, 255, 255)); // Scegli il colore che preferisci
+        panelLoginWhite.setOpaque(true); // Imposta come trasparente per mostrare il gradiente
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, -200, 0, 0);
+        gbc.weightx = 0.2;
+        gbc.weighty = 1;
+        gradientPanel.add(panelLoginWhite, gbc);
+
+
+        //Crea un JPanel con BoxLayout per contenere i componenti
+        JPanel panelLoginTrasparent = new JPanel(new GridBagLayout());
+        panelLoginTrasparent.setBackground(new Color(133, 53, 53)); // Scegli il colore che preferisci
+        panelLoginTrasparent.setOpaque(true); // Imposta come trasparente per mostrare il gradiente
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 0.6;
+        gbc.weighty = 1;
+        gradientPanel.add(panelLoginTrasparent, gbc);
+
+//        gbc.gridx = 0;
+//        gbc.gridy = 0;
+//        gbc.gridwidth = GridBagConstraints.REMAINDER;
+//        gbc.gridheight = GridBagConstraints.REMAINDER;
+//        gbc.weightx = 1;
+//        gbc.weighty = 1;
+//        gbc.fill = GridBagConstraints.BOTH;
+//        gbc.anchor = GridBagConstraints.CENTER;
+//        panelLoginTrasparent.add(imageLabel, gbc);
+
+
+
+        // Creo e aggiungere i componenti
         JLabel loginLabel = new JLabel("Login");
         if (fontExtraBold != null)
             loginLabel.setFont(fontExtraBold);
+        gbc.gridwidth = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(50, 5, 100, 5);
+        panelLoginWhite.add(loginLabel, gbc);
 
         JLabel emailLabel = new JLabel("Email:");
         RoundedTextField emailField = new RoundedTextField(20);
+        if (fontRegularBold != null)
+            emailLabel.setFont(fontRegularBold);
         if (fontRegular != null){
-            emailLabel.setFont(fontRegular);
-            //emailField.setFont(fontRegular);
+            emailField.setFont(fontRegular);
         }
         emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, emailField.getPreferredSize().height));
         emailField.setBackground(new Color(217, 217, 217));
+        gbc.gridy = 2;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panelLoginWhite.add(emailLabel, gbc);
+        gbc.gridy = 3;
+        panelLoginWhite.add(emailField, gbc);
+
 
         JLabel passwordLabel = new JLabel("Password:");
         RoundedTextField passwordField = new RoundedTextField(20);
         passwordField.setBackground(new Color(217, 217, 217));
         passwordField.setEchoChar('*');
-
-
+        if (fontRegularBold != null)
+            passwordLabel.setFont(fontRegularBold);
         if (fontRegular != null){
-            passwordLabel.setFont(fontRegular);
-            //passwordField.setFont(fontRegular);
+            passwordField.setFont(fontRegular);
         }
+        gbc.gridy = 4;
+        panelLoginWhite.add(passwordLabel, gbc);
+        gbc.gridy = 5;
+        panelLoginWhite.add(passwordField, gbc);
 
         // Inizializza il JCheckBox per mostrare/nascondere la password
         showPasswordCheckBox = new JCheckBox("Mostra Password");
@@ -90,6 +168,8 @@ public class LoginPage extends JFrame {
                 }
             }
         });
+        gbc.gridy = 6;
+        panelLoginWhite.add(showPasswordCheckBox, gbc);
 
 
         JLabel creaUtente = new JLabel("Crea Utente");
@@ -110,7 +190,14 @@ public class LoginPage extends JFrame {
                 // Quando il mouse esce dalla JLabel, rimuovi la sottolineatura
                 creaUtente.setText("Crea Utente");
             }
+
+            @Override
+            public void mouseClicked(MouseEvent e){
+                myGestore.newUser();
+            }
         });
+        gbc.gridy = 7;
+        panelLoginWhite.add(creaUtente, gbc);
 
         JLabel passwordDimenticata = new JLabel("Password dimenticata?");
         if (fontRegularSmall != null)
@@ -132,82 +219,21 @@ public class LoginPage extends JFrame {
                 passwordDimenticata.setText("Password dimenticata?");
             }
         });
-
+        gbc.gridy = 8;
+        panelLoginWhite.add(passwordDimenticata, gbc);
 
         loginButton = new JButton("Accedi");
         if (fontBold != null)
             loginButton.setFont(fontBold);
-        loginButton.setBackground(new Color(255, 138, 91));
+        loginButton.setBackground(new Color(34, 40, 35, 255));
         loginButton.setForeground(Color.WHITE);
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambia il cursore per indicare che è cliccabile
+        gbc.gridy = 9;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.fill = 0;
+        panelLoginWhite.add(loginButton, gbc);
 
-
-
-        // Aggiungi un pannello vuoto come spazio
-        JPanel spacer = new JPanel();
-        spacer.setOpaque(false); // Rendi il pannello trasparente
-
-        // Crea un JPanel con BoxLayout per contenere i componenti
-        JPanel panelLogin = new JPanel(new GridBagLayout());
-        panelLogin.setBackground(new Color(255, 255, 255)); // Scegli il colore che preferisci
-        panelLogin.setOpaque(true); // Imposta come trasparente per mostrare il gradiente
-        panelLogin.setPreferredSize(new Dimension(500, 100));
-        GridBagConstraints gbc = new GridBagConstraints();
-        // Impostazioni comuni per GridBagConstraints
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(7, 7, 7, 7); // Margini (top, left, bottom, right)
-
-
-        // Aggiungi i componenti al panelLogin con GridBagConstraints
-        // Aggiungi loginLabel
-        panelLogin.add(loginLabel, gbc);
-
-        // Aggiungo una label vuota invisibile per fare spazio
-        panelLogin.add(spacer, gbc);
-
-        // Aggiungi emailLabel e emailField
-        panelLogin.add(emailLabel, gbc);
-        panelLogin.add(emailField, gbc);
-
-        // Aggiungi passwordLabel e passwordField
-        panelLogin.add(passwordLabel, gbc);
-        panelLogin.add(passwordField, gbc);
-        panelLogin.add(showPasswordCheckBox, gbc);
-
-        // Aggiungi password dimenticata e crea utente
-        panelLogin.add(creaUtente, gbc);
-        panelLogin.add(passwordDimenticata, gbc);
-        // Per posizionare il loginButton sulla destra
-        gbc.fill = GridBagConstraints.NONE; // Non riempire orizzontalmente
-        gbc.anchor = GridBagConstraints.LINE_END; // Allinea a destra
-        panelLogin.add(loginButton, gbc);
-
-
-        // ActionListener per il pulsante di login
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = emailField.getText();
-                String password = new String(passwordField.getPassword());
-                if(email.isEmpty())
-                    mostraMessageDialog("Inserire l'email", "Attenzione");
-                else if(password.isEmpty())
-                    mostraMessageDialog("Inserire la password", "Attenzione");
-                else
-                    myGestore.CheckLogin(email, password);
-            }
-        });
-
-        // Crea il gradiente di sfondo
-        GradientPanel gradientPanel = new GradientPanel(new Color(0x9A, 0xD2, 0xD4), new Color(0x00, 0x7E, 0xA7));
-        gradientPanel.setLayout(new BorderLayout());
-        gradientPanel.add(panelLogin, BorderLayout.WEST);
-
-        // Imposta il gradientPanel come content pane del JFrame
         setContentPane(gradientPanel);
-        gradientPanel.add(imageLabel, BorderLayout.CENTER);
-
     }
 
     private void fontExtraBold() {
@@ -245,6 +271,17 @@ public class LoginPage extends JFrame {
             fontRegular = null;
         }
     }
+    private void fontRegularBold() {
+        try {
+            InputStream is = LoginPage.class.getResourceAsStream("/Rubik/static/Rubik-Bold.ttf"); // Sostituisci con il tuo percorso
+            fontRegularBold = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(22f); // Modifica la dimensione a piacimento
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(fontRegularBold);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fontRegularBold = null;
+        }
+    }
 
     private void fontRegularSmall() {
         try {
@@ -259,11 +296,7 @@ public class LoginPage extends JFrame {
     }
     private void mostraMessageDialog(String testo, String titolo) {
         JOptionPane.showMessageDialog(this, testo, titolo, JOptionPane.INFORMATION_MESSAGE);
-
     }
-
-
-
 }
 
 
