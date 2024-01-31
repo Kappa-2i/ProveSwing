@@ -125,6 +125,7 @@ public class LoginPage extends JFrame {
 
         //Creazione della label 'Email' e della textfield per il campo email.
         JLabel emailLabel = new JLabel("Email:");
+
         RoundedTextField emailField = new RoundedTextField(20);
         if (fontRegularBold != null)
             emailLabel.setFont(fontRegularBold);
@@ -240,6 +241,13 @@ public class LoginPage extends JFrame {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = 0;
         panelLoginWhite.add(loginButton, gbc); //Aggiunge il loginButton al panelLoginWhite
+        loginButton.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                // Quando con il mouse clicco sul pulsante
+                myGestore.CheckLogin(emailField.getText(), passwordField.getText());
+            }
+        });
 
         setContentPane(contentPane);
     }

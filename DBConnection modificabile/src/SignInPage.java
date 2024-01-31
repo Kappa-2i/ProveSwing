@@ -1,18 +1,10 @@
 import javax.naming.event.ObjectChangeListener;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.Console;
-import java.io.FileDescriptor;
-import java.io.InputStream;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
+import java.io.*;
+import java.util.regex.*;
+import java.awt.event.*;
 
 
 
@@ -184,23 +176,76 @@ public class SignInPage extends JFrame {
         panelSignIn.add(dataField, gbc); // Aggiunge dataField al panelSignIn
 
 
-        // Creazione della label 'luogoNascitaLabel' e della textfield per il campo luogo di nascita
-        JLabel luogoNascitaLabel = new JLabel("Luogo di Nascita");
-        luogoNascitaLabel.setForeground(Color.WHITE);
+        // Creazione della label 'cittàLabel' e della textfield per il campo luogo di nascita
+        JLabel cittàLabel = new JLabel("Città");
+        cittàLabel.setForeground(Color.WHITE);
         if(fontBold != null)
-            luogoNascitaLabel.setFont(fontBold);
-        RoundedTextField luogoNascitaField = new RoundedTextField(20);
-        luogoNascitaField.setBackground(new Color(217, 217, 217));
+            cittàLabel.setFont(fontBold);
+        RoundedTextField cittàfield = new RoundedTextField(20);
+        cittàfield.setBackground(new Color(217, 217, 217));
         if(fontRegular != null)
-            luogoNascitaField.setFont(fontRegular);
+            cittàfield.setFont(fontRegular);
         gbc.insets = new Insets(5, 100, 5, 5);
         gbc.gridx = 1;
         gbc.gridy = 3;
-        panelSignIn.add(luogoNascitaLabel, gbc); // Aggiunge luogoNascitaLabel al panelSignIn
+        panelSignIn.add(cittàLabel, gbc); // Aggiunge cittàLabel al panelSignIn
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.insets = new Insets(5, 100, 20, 5);
-        panelSignIn.add(luogoNascitaField, gbc); // Aggiunge luogoNascitaField al panelSignIn
+        panelSignIn.add(cittàfield, gbc); // Aggiunge luogoNascitaField al panelSignIn
+
+        JLabel viaLabel = new JLabel("Via");
+        viaLabel.setForeground(Color.WHITE);
+        if(fontBold != null)
+            viaLabel.setFont(fontBold);
+        RoundedTextField viaField = new RoundedTextField(20);
+        viaField.setBackground(new Color(217, 217, 217));
+        if(fontRegular != null)
+            viaField.setFont(fontRegular);
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panelSignIn.add(viaLabel, gbc); // Aggiunge nomeLabel al panelSignIn
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.insets = new Insets(5, 5, 20, 5);
+        panelSignIn.add(viaField, gbc); // Aggiunge nomeField al panelSignIn
+
+
+        JLabel civicoLabel = new JLabel("Civico");
+        civicoLabel.setForeground(Color.WHITE);
+        if(fontBold != null)
+            civicoLabel.setFont(fontBold);
+        RoundedTextField civicoField = new RoundedTextField(20);
+        civicoField.setBackground(new Color(217, 217, 217));
+        if(fontRegular != null)
+            civicoField.setFont(fontRegular);
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.insets = new Insets(5, 100, 5, 5);
+        panelSignIn.add(civicoLabel, gbc); // Aggiunge nomeLabel al panelSignIn
+        gbc.gridx = 1;
+        gbc.gridy = 6;
+        gbc.insets = new Insets(5, 100, 20, 5);
+        panelSignIn.add(civicoField, gbc); // Aggiunge nomeField al panelSignIn
+
+        JLabel capLabel = new JLabel("Cap");
+        capLabel.setForeground(Color.WHITE);
+        if(fontBold != null)
+            capLabel.setFont(fontBold);
+        RoundedTextField capField = new RoundedTextField(20);
+        capField.setBackground(new Color(217, 217, 217));
+        if(fontRegular != null)
+            capField.setFont(fontRegular);
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panelSignIn.add(capLabel, gbc); // Aggiunge nomeLabel al panelSignIn
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.insets = new Insets(5, 5, 20, 5);
+        panelSignIn.add(capField, gbc); // Aggiunge nomeField al panelSignIn
+
 
 
         //Creazione della label 'codiceFiscaleLabel' e della textfield per il campo codice fiscale
@@ -212,13 +257,13 @@ public class SignInPage extends JFrame {
         codiceFiscaleField.setBackground(new Color(217, 217, 217));
         if(fontRegular != null)
             codiceFiscaleField.setFont(fontRegular);
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.insets = new Insets(5, 100, 5, 5);
+        gbc.gridx = 1;
+        gbc.gridy = 7;
         panelSignIn.add(codiceFiscaleLabel, gbc); // Aggiunge codiceFiscaleLabel al panelSignIn
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.insets = new Insets(5, 5, 20, 5);
+        gbc.gridx = 1;
+        gbc.gridy = 8;
+        gbc.insets = new Insets(5, 100, 20, 5);
         panelSignIn.add(codiceFiscaleField, gbc); // Aggiunge codiceFiscaleField al panelSignIn
 
 
@@ -231,14 +276,16 @@ public class SignInPage extends JFrame {
         telefonoField.setBackground(new Color(217, 217, 217));
         if(fontRegular != null)
             telefonoField.setFont(fontRegular);
-        gbc.insets = new Insets(5, 100, 5, 5);
-        gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.gridx = 0;
+        gbc.gridy = 9;
         panelSignIn.add(telefonoLabel, gbc); // Aggiunge telefonoLabel al panelSignIn
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        gbc.insets = new Insets(5, 100, 20, 5);
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        gbc.insets = new Insets(5, 5, 20, 5);
         panelSignIn.add(telefonoField, gbc); // Aggiunge telefonoField al panelSignIn
+
+
 
 
         //Creazione della label 'emailLabel' e della textfield per il campo email
@@ -258,13 +305,13 @@ public class SignInPage extends JFrame {
                 validateEmail(emailField.getText());
             }
         });
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.insets = new Insets(5, 100, 5, 5);
+        gbc.gridx = 1;
+        gbc.gridy = 9;
         panelSignIn.add(emailLabel, gbc);  // Aggiunge emailLabel al panelSignIn
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.gridx = 1;
+        gbc.gridy = 10;
+        gbc.insets = new Insets(5, 100, 20, 5);
         panelSignIn.add(emailField, gbc); // Aggiunge emailField al panelSignIn
 
 
@@ -278,13 +325,13 @@ public class SignInPage extends JFrame {
         if(fontRegular != null)
             passwordField.setFont(fontRegular);
         passwordField.setEchoChar('*');
-        gbc.insets = new Insets(5, 100, 5, 5);
-        gbc.gridx = 1;
-        gbc.gridy = 7;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.gridx = 0;
+        gbc.gridy = 11;
         panelSignIn.add(passwordLabel, gbc); // Aggiunge passwordLabel al panelSignIn
-        gbc.gridx = 1;
-        gbc.gridy = 8;
-        gbc.insets = new Insets(5, 100, 5, 5);
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(5, 5, 20, 5);
         panelSignIn.add(passwordField, gbc); // Aggiunge passwordField al panelSignIn
 
 
@@ -297,10 +344,18 @@ public class SignInPage extends JFrame {
         signInButton.setForeground(Color.WHITE);
         signInButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambia il cursore per indicare che è cliccabile
         gbc.gridx = 1;
-        gbc.gridy = 9;
+        gbc.gridy = 13;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = 0;
         gbc.insets = new Insets(30, 5, 5, 5);
+        signInButton.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                // Quando con il mouse clicco sul pulsante
+                myGestore.insertDati(codiceFiscaleField.getText(), nomeField.getText(), cognomeField.getText(),
+                        dataField.getText(), telefonoField.getText(), cittàfield.getText(), viaField.getText(), civicoField.getText(), capField.getText());
+            }
+        });
         panelSignIn.add(signInButton, gbc); // Aggiunge signInButton al panelSignIn
 
 
@@ -320,7 +375,7 @@ public class SignInPage extends JFrame {
             }
         });
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 13;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = 0;
         panelSignIn.add(backButton, gbc); // Aggiunge backButton al panelSignIn

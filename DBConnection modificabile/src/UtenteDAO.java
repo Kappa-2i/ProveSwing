@@ -2,6 +2,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 
 // Definizione della classe UtenteDAO
 public class UtenteDAO {
@@ -41,4 +45,72 @@ public class UtenteDAO {
         // Ritorno di null in caso di errore o se le credenziali non sono valide
         return null;
     }
+
+
+    public static void insertDati(String codiceFiscale, String nome, String cognome, String dataDiNascita,
+                           String numeroTelefono, String citta, String via, String nCivico, String cap) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = DBConnection.getDBConnection().getConnection();
+            connection.setAutoCommit(false); // Imposta l'auto commit su "off"
+
+            // Crea un'istruzione SQL di inserimento con parametri segnaposto (?)
+            String sql = "INSERT INTO test.persona (codicefiscale, nome, cognome, datanascita, numerotelefono, città, via, n_civico, cap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, codiceFiscale);
+            preparedStatement.setString(2, nome);
+            preparedStatement.setString(3, cognome);
+
+            // Converte la data di nascita da stringa a java.sql.Date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Adatta il formato alla tua stringa
+            java.util.Date parsedDate = dateFormat.parse(dataDiNascita);
+            java.sql.Date sqlDate = new java.sql.Date(parsedDate.getTime());
+
+            preparedStatement.setDate(4, sqlDate);
+            preparedStatement.setString(5, numeroTelefono);
+            preparedStatement.setString(6, citta);
+            preparedStatement.setString(7, via);
+            preparedStatement.setString(8, nCivico);
+            preparedStatement.setString(9, cap);
+
+            preparedStatement.execute();
+
+
+            // Commit delle modifiche
+            connection.commit();
+        } catch (SQLException e) {
+            // Gestisci l'eccezione e esegui il rollback in caso di errore
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackException) {
+                    rollbackException.printStackTrace();
+                }
+            }
+            e.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // Chiudi la connessione e il preparedStatement
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException closeException) {
+                    closeException.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException closeException) {
+                    closeException.printStackTrace();
+                }
+            }
+        }
+    }
 }
+
+
+

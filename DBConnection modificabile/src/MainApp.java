@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 
 public class MainApp {
     LoginPage lp;
@@ -84,6 +85,16 @@ public class MainApp {
             default:
                 break;
         }
+    }
+
+    public void insertDati(String codiceFiscale, String nome, String cognome,
+                           String dataDiNascita, String numeroTelefono,
+                           String citta, String via, String nCivico, String cap){
+
+        UtenteDAO.insertDati(codiceFiscale,  nome, cognome,
+                 dataDiNascita,  numeroTelefono,
+                citta,  via,  nCivico, cap);
+        System.out.println("Diocane");
     }
 
     public void newUser(){
