@@ -3,8 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.io.InputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 
 public class LoginPage extends JFrame {
@@ -237,6 +236,7 @@ public class LoginPage extends JFrame {
         loginButton.setBackground(new Color(34, 40, 35, 255));
         loginButton.setForeground(Color.WHITE);
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambia il cursore per indicare che è cliccabile
+        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         gbc.gridy = 9;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = 0;
@@ -323,10 +323,7 @@ public class LoginPage extends JFrame {
     }
 
 
-    // Creazione finestra messaggio errore
-    private void mostraMessageDialog(String testo, String titolo) {
-        JOptionPane.showMessageDialog(this, testo, titolo, JOptionPane.INFORMATION_MESSAGE);
-    }
+
 
 }
 

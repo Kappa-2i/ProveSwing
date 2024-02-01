@@ -1,8 +1,7 @@
 import javax.swing.*;
-import java.awt.*;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 
 public class MainApp {
     LoginPage lp;
@@ -91,10 +90,26 @@ public class MainApp {
                            String dataDiNascita, String numeroTelefono,
                            String citta, String via, String nCivico, String cap){
 
-        UtenteDAO.insertDati(codiceFiscale,  nome, cognome,
-                 dataDiNascita,  numeroTelefono,
-                citta,  via,  nCivico, cap);
-        System.out.println("Diocane");
+        if (codiceFiscale.isEmpty() || nome.isEmpty() || cognome.isEmpty() || numeroTelefono.isEmpty() || citta.isEmpty() || nCivico.isEmpty() || cap.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Tutti i campi obbligatori devono essere compilati.",
+                    "Errore di validazione",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+        else {
+            UtenteDAO.insertDati(codiceFiscale,  nome, cognome,
+                    dataDiNascita,  numeroTelefono,
+                    citta,  via,  nCivico, cap);
+        }
+    }
+
+    public boolean confirmedPassword(String password, String confirmedPassword){
+        if (password.equals(confirmedPassword))
+            return true;
+        else
+            return false;
     }
 
     public void newUser(){

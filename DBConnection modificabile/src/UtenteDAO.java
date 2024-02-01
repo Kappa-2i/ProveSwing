@@ -1,8 +1,5 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.CallableStatement;
+import javax.swing.*;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -48,7 +45,7 @@ public class UtenteDAO {
 
 
     public static void insertDati(String codiceFiscale, String nome, String cognome, String dataDiNascita,
-                           String numeroTelefono, String citta, String via, String nCivico, String cap) {
+                                  String numeroTelefono, String citta, String via, String nCivico, String cap) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -68,6 +65,7 @@ public class UtenteDAO {
             java.util.Date parsedDate = dateFormat.parse(dataDiNascita);
             java.sql.Date sqlDate = new java.sql.Date(parsedDate.getTime());
 
+
             preparedStatement.setDate(4, sqlDate);
             preparedStatement.setString(5, numeroTelefono);
             preparedStatement.setString(6, citta);
@@ -75,9 +73,14 @@ public class UtenteDAO {
             preparedStatement.setString(8, nCivico);
             preparedStatement.setString(9, cap);
 
-            preparedStatement.execute();
-
-
+            // Esegui l'istruzione di inserimento
+            preparedStatement.executeUpdate();
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Dati inseriti con successo.",
+                    "Benvenuta/o",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
             // Commit delle modifiche
             connection.commit();
         } catch (SQLException e) {
@@ -89,7 +92,42 @@ public class UtenteDAO {
                     rollbackException.printStackTrace();
                 }
             }
-            e.printStackTrace();
+            if (e.getMessage().contains("value too long for type character varying(5)")) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Il campo CAP deve avere al massimo 5 caratteri.",
+                        "Errore di validazione",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+            if (e.getMessage().contains("value too long for type character varying(16)")) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Il campo Codice Fiscale deve avere al massimo 16 caratteri.",
+                        "Errore di validazione",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+            if (e.getMessage().contains("new row for relation \"persona\" violates check constraint \"persona_numerotelefono_check\"")) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Il campo Telefono deve avere al massimo 10 caratteri.",
+                        "Errore di validazione",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+            if (e.getMessage().contains("new row for relation \"persona\" violates check constraint \"persona_datanascita_check\"")) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "La data di nascita non è valida. Devi essere maggiorenne.",
+                        "Errore di validazione",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            } else {
+                // Gestisci altri tipi di errore
+                e.printStackTrace();
+            }
+
         } catch (ParseException e) {
             throw new RuntimeException(e);
         } finally {

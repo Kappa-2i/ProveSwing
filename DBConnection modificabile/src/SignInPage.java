@@ -3,8 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.regex.*;
 import java.awt.event.*;
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
+
 
 
 
@@ -20,6 +26,7 @@ public class SignInPage extends JFrame {
     private Font fontRegularSmall;
     private Font fontRegularBold;
     private GridBagConstraints gbcOriginal;
+    private String dataFormattata;
 
 
     public static void main(String[] args) {
@@ -161,10 +168,19 @@ public class SignInPage extends JFrame {
         JLabel dataLabel = new JLabel("Data di Nascita");
         dataLabel.setForeground(Color.WHITE);
         if(fontBold != null)
-            dataLabel.setFont(fontBold);;
-        RoundedTextField dataField = new RoundedTextField(20);
+            dataLabel.setFont(fontBold);
+        // Creazione del Field con JDataChooser importato per poter scegliere la data di nascita
+        JDateChooser dataField = new JDateChooser();
+        dataField.getJCalendar().getYearChooser().setStartYear(1900);//anno minimo del calendario: 1900
+        dataField.getJCalendar().getYearChooser().setEndYear(Calendar.getInstance().get(Calendar.YEAR));//anno massimo del calendario: anno corrente
+
+        // Imposta il formato della data come "yyyy-MM-dd"
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dataField.setDateFormatString("yyyy-MM-dd");
+        // Funzione per non poter far scrivere a mano la data
+        dataField.getDateEditor().setEnabled(false);
         dataField.setBackground(new Color(217, 217, 217));
-        if(fontRegular != null)
+        if (fontRegular != null)
             dataField.setFont(fontRegular);
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.gridx = 0;
@@ -297,14 +313,6 @@ public class SignInPage extends JFrame {
         emailField.setBackground(new Color(217, 217, 217));
         if (fontRegular != null)
             emailField.setFont(fontRegular);
-        //Controllo della validità dell'email quando ci si sposta dal campo email
-        emailField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                super.focusLost(e);
-                validateEmail(emailField.getText());
-            }
-        });
         gbc.insets = new Insets(5, 100, 5, 5);
         gbc.gridx = 1;
         gbc.gridy = 9;
@@ -334,6 +342,25 @@ public class SignInPage extends JFrame {
         gbc.insets = new Insets(5, 5, 20, 5);
         panelSignIn.add(passwordField, gbc); // Aggiunge passwordField al panelSignIn
 
+        //Creazione della label 'Conferma Password' e della textfield per il campo conferma Password
+        JLabel passwordConfirmedLabel = new JLabel("Conferma Password");
+        passwordConfirmedLabel.setForeground(Color.WHITE);
+        if(fontBold != null)
+            passwordConfirmedLabel.setFont(fontBold);
+        RoundedTextField passwordConfirmedField = new RoundedTextField(20);
+        passwordConfirmedField.setBackground(new Color(217, 217, 217));
+        passwordConfirmedField.setEchoChar('*');
+        if (fontRegular != null)
+            passwordConfirmedField.setFont(fontRegular);
+        gbc.insets = new Insets(5, 100, 5, 5);
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        panelSignIn.add(passwordConfirmedLabel, gbc);  // Aggiunge passwordConfirmedLabel al panelSignIn
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        gbc.insets = new Insets(5, 100, 20, 5);
+        panelSignIn.add(passwordConfirmedField, gbc); // Aggiunge passwordConfirmedField al panelSignIn
+
 
         //Crazione del bottone 'SignInButton'
         JButton signInButton = new JButton("Registrati");
@@ -343,6 +370,7 @@ public class SignInPage extends JFrame {
         signInButton.setBackground(new Color(34, 40, 35, 255));
         signInButton.setForeground(Color.WHITE);
         signInButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambia il cursore per indicare che è cliccabile
+        signInButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         gbc.gridx = 1;
         gbc.gridy = 13;
         gbc.anchor = GridBagConstraints.EAST;
@@ -351,9 +379,26 @@ public class SignInPage extends JFrame {
         signInButton.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
+                java.util.Date dataSelezionata = dataField.getDate();
+                if (dataSelezionata != null) {
+                    // Viene formattata la data Selezionata dall'utente e passata ad una stringa
+                    dataFormattata = new SimpleDateFormat("yyyy-MM-dd").format(dataSelezionata);
+                } else {
+                    // Gestisci il caso in cui 'dataSelezionata' sia null
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Seleziona una data di nascita valida.",
+                            "Errore di validazione",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
                 // Quando con il mouse clicco sul pulsante
-                myGestore.insertDati(codiceFiscaleField.getText(), nomeField.getText(), cognomeField.getText(),
-                        dataField.getText(), telefonoField.getText(), cittàfield.getText(), viaField.getText(), civicoField.getText(), capField.getText());
+                if (myGestore.confirmedPassword(passwordField.getText(), passwordConfirmedField.getText())){
+                    myGestore.insertDati(codiceFiscaleField.getText(), nomeField.getText(), cognomeField.getText(),
+                           dataFormattata, telefonoField.getText(), cittàfield.getText(), viaField.getText(), civicoField.getText(), capField.getText());
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Le password non corrispondono", "Messaggio di Errore", JOptionPane.ERROR_MESSAGE);
             }
         });
         panelSignIn.add(signInButton, gbc); // Aggiunge signInButton al panelSignIn
@@ -367,6 +412,7 @@ public class SignInPage extends JFrame {
         backButton.setBackground(new Color(34, 40, 35, 255));
         backButton.setForeground(Color.WHITE);
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambia il cursore per indicare che è cliccabile
+        backButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         backButton.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e){
