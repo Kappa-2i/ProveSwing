@@ -39,5 +39,15 @@
     </orderEntry>
     <orderEntry type="library" name="api" level="project" />
     <orderEntry type="library" name="jcalendar-1.4" level="project" />
+    <orderEntry type="library" name="jcalendar-1.41" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../postgresql-42.7.1 copia.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

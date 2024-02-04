@@ -11,7 +11,7 @@ public class UtenteDAO {
     public static String[] checkCredentials(String email, String password) throws SQLException {
         // Query SQL per ottenere i dettagli dell'utente
         String sql = "SELECT a.NomeUtente, cc.Saldo, CASE WHEN cc.IBAN IS NULL THEN 'false' ELSE 'true' END as ContoEsistente " +
-                "FROM test.account a LEFT JOIN test.contocorrente cc ON a.email = cc.account_email " +
+                "FROM db.account a LEFT JOIN db.contocorrente cc ON a.email = cc.account_email " +
                 "WHERE a.email ILIKE ? AND a.password = ?";
 
         // Utilizzo di un blocco try-with-resources per la gestione automatica delle risorse
@@ -54,7 +54,7 @@ public class UtenteDAO {
             connection.setAutoCommit(false); // Imposta l'auto commit su "off"
 
             // Crea un'istruzione SQL di inserimento con parametri segnaposto (?)
-            String sql = "INSERT INTO test.persona (codicefiscale, nome, cognome, datanascita, numerotelefono, città, via, n_civico, cap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO db.persona (codicefiscale, nome, cognome, datanascita, numerotelefono, città, via, n_civico, cap) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, codiceFiscale);
             preparedStatement.setString(2, nome);

@@ -1,4 +1,3 @@
-import java.math.BigDecimal;
 import java.sql.*;
 
 public class DBConnection {
@@ -40,5 +39,3 @@ public class DBConnection {
         }
     }
 }
-
-
